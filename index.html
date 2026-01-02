@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newstapa - Шинэ мэдээ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary-color: #1a5fb4;
+            --secondary-color: #e01b24;
+            --dark-color: #333333;
+            --light-color: #f5f5f5;
+            --text-color: #222222;
+            --gray-color: #777777;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        /* Header & Navigation */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 15px 0;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: var(--secondary-color);
+        }
+        
+        .logo-text {
+            font-size: 22px;
+        }
+        
+        /* Centered Navigation */
+        nav {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 600;
+            font-size: 18px;
+            transition: color 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        nav ul li a.active {
+            color: var(--primary-color);
+        }
+        
+        nav ul li a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+        
+        /* Language Translation Button */
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+        
+        .translate-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        
+        .translate-btn:hover {
+            background-color: #15549e;
+        }
+        
+        .translate-btn i {
+            margin-right: 8px;
+        }
+        
+        /* Google Translate Widget Container */
+        #google_translate_element {
+            display: none;
+        }
+        
+        /* Mobile menu button (hidden on desktop) */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--primary-color);
+            cursor: pointer;
+            z-index: 101;
+        }
+        
+        /* Main Content */
+        main {
+            padding: 40px 0;
+            min-height: 70vh;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .section-title {
+            font-size: 32px;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+            text-align: center;
+        }
+        
+        .section-subtitle {
+            font-size: 20px;
+            color: var(--gray-color);
+            margin-bottom: 40px;
+            text-align: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Home Section - Empty */
+        .empty-home {
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--gray-color);
+        }
+        
+        .empty-home i {
+            font-size: 80px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+        
+        .empty-home h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+        
+        .empty-home p {
+            font-size: 18px;
+            max-width: 600px;
+            line-height: 1.8;
+        }
+        
+        /* Content Section - News with Videos */
+        .news-with-videos {
+            margin-top: 30px;
+        }
+        
+        .news-article {
+            background-color: white;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .article-header {
+            padding: 30px 30px 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .article-title {
+            font-size: 28px;
+            color: var(--dark-color);
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+        
+        .article-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 15px;
+            color: var(--gray-color);
+        }
+        
+        .article-content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .article-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .article-text {
+            font-size: 17px;
+            line-height: 1.8;
+        }
+        
+        .article-text p {
+            margin-bottom: 20px;
+        }
+        
+        .article-video {
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            overflow: hidden;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .video-container {
+            flex: 1;
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            position: relative;
+        }
+        
+        .video-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .video-placeholder i {
+            font-size: 60px;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+        
+        .video-placeholder p {
+            max-width: 300px;
+            color: #999;
+        }
+        
+        .video-info {
+            padding: 15px;
+            background-color: white;
+            border-top: 1px solid #eee;
+        }
+        
+        .video-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+        
+        .video-source {
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+        
+        .youtube-channel-link {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .youtube-channel-link:hover {
+            background-color: #15549e;
+        }
+        
+        /* About Section with Contact Info */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+        
+        @media (max-width: 992px) {
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .about-text h3 {
+            font-size: 26px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 17px;
+        }
+        
+        .contact-info {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .contact-info h3 {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .contact-item i {
+            font-size: 20px;
+            color: var(--primary-color);
+            margin-right: 15px;
+            margin-top: 3px;
+            width: 24px;
+        }
+        
+        .contact-details h4 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+        
+        .contact-details p {
+            color: var(--gray-color);
+            font-size: 16px;
+        }
+        
+        .team {
+            margin-top: 60px;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .team-member {
+            text-align: center;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .member-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background-color: #ddd;
+            background-image: url('https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80');
+            background-size: cover;
+            background-position: center;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .member-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .member-role {
+            color: var(--gray-color);
+            font-size: 16px;
+        }
+        
+        /* Donation Section */
+        .donation-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .donation-card {
+            background-color: white;
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .donation-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .donation-card i {
+            font-size: 50px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .donation-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+        
+        .donation-card p {
+            margin-bottom: 25px;
+            color: var(--gray-color);
+        }
+        
+        .donate-btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .donate-btn:hover {
+            background-color: #c0171f;
+        }
+        
+        /* Google Translate Banner */
+        .goog-te-banner-frame {
+            display: none !important;
+        }
+        
+        .goog-te-menu-value span {
+            color: white !important;
+        }
+        
+        .goog-te-menu-value span:first-child {
+            display: none !important;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            /* Hide desktop nav, show mobile menu button */
+            nav ul {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background-color: white;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 30px;
+                z-index: 100;
+            }
+            
+            nav ul.active {
+                display: flex;
+            }
+            
+            nav ul li a {
+                font-size: 22px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            /* Adjust header for mobile */
+            .header-container {
+                justify-content: space-between;
+            }
+            
+            nav {
+                justify-content: flex-end;
+            }
+            
+            .article-title {
+                font-size: 24px;
+            }
+            
+            .language-switcher {
+                margin-left: 10px;
+            }
+            
+            .translate-btn span {
+                display: none;
+            }
+            
+            .translate-btn i {
+                margin-right: 0;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .article-header, .article-content, .contact-info {
+                padding: 20px;
+            }
+            
+            .donation-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Google Translate Script -->
+    <div id="google_translate_element"></div>
+    
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-newspaper"></i>
+                <span class="logo-text">Newstapa</span>
+            </a>
+            
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="#" class="nav-link active" data-section="home">ЭХЛЭЛ</a></li>
+                    <li><a href="#" class="nav-link" data-section="content">КОНТЕНТ</a></li>
+                    <li><a href="#" class="nav-link" data-section="about">БИДНИЙ ТУХАЙ</a></li>
+                    <li><a href="#" class="nav-link" data-section="donation">ХАНДИВ</a></li>
+                </ul>
+            </nav>
+            
+            <div class="language-switcher">
+                <button id="translateBtn" class="translate-btn">
+                    <i class="fas fa-language"></i>
+                    <span>English</span>
+                </button>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Home Section - Empty for you to fill -->
+            <section id="home" class="section active">
+                <div class="empty-home">
+                    <i class="fas fa-newspaper"></i>
+                    <h2>Эхлэл хуудас</h2>
+                    <p>Энэ хэсэг нь хоосон байна. Та өөрийн агуулгаа энд оруулна уу.</p>
+                    <p style="margin-top: 20px; font-size: 16px;">Та дээрх цэснээс бусад хэсгүүд рүү шилжиж болно.</p>
+                </div>
+            </section>
+            
+            <!-- Content Section - News with Videos -->
+            <section id="content" class="section">
+                <h2 class="section-title">Сүүлийн мэдээ, бичлэгүүд</h2>
+                <p class="section-subtitle">Бидний сүүлийн үеийн судалгаа, мэдээ, видео контентууд</p>
+                
+                <div class="news-with-videos">
+                    <!-- News Article 1 -->
+                    <div class="news-article">
+                        <div class="article-header">
+                            <h1 class="article-title">Замын тээврийн аюулгүй байдал: Шинэ дүрэм, өөрчлөлтүүд</h1>
+                            <div class="article-meta">
+                                <span><i class="far fa-calendar"></i> 2023 оны 10 сарын 15</span>
+                                <span><i class="far fa-eye"></i> 12,345 үзсэн</span>
+                                <span><i class="far fa-clock"></i> 5 мин унших</span>
+                            </div>
+                        </div>
+                        
+                        <div class="article-content">
+                            <div class="article-text">
+                                <p>Энэ оны зун хэрэгжиж эхэлсэн замын тээврийн аюулгүй байдлын шинэ дүрэм журам нь нийтэд өргөн хүрээний хэлэлцүүлэг, санал шүүмжлэлийг өдөөсөн.</p>
+                                <p>Шинэ дүрмийн дагуу жолооч нарын мэргэжлийн чадварыг үнэлэх, сургалтын тогтолцоог шинэчлэх, ослын үед тусламж үйлчилгээ үзүүлэх хурдацтай байдлыг сайжруулах зэрэг олон чиглэлээр ажил хийгдэж байна.</p>
+                                <p>Монгол улсын Замын тээврийн ерөнхий газар энэ чиглэлээр хэд хэдэн судалгааны ажлыг хийж, гадаад, дотоодын туршлагад суурилсан шинэлэг арга барилыг нэвтрүүлэхээр ажиллаж байна.</p>
+                            </div>
+                            
+                            <div class="article-video">
+                                <div class="video-container">
+                                    <!-- You can replace this with an actual YouTube embed iframe -->
+                                    <div class="video-placeholder">
+                                        <i class="fab fa-youtube"></i>
+                                        <p>Энэ мэдээний холбогдох видео контент</p>
+                                        <p style="font-size: 14px; margin-top: 10px;">YouTube суваг дээрх холбогдох бичлэгийг энд оруулна уу</p>
+                                    </div>
+                                </div>
+                                <div class="video-info">
+                                    <div class="video-title">Замын тээврийн аюулгүй байдал - Шинэ дүрэм журам</div>
+                                    <div class="video-source">YouTube суваг: Budragchaa Ser</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- News Article 2 -->
+                    <div class="news-article">
+                        <div class="article-header">
+                            <h1 class="article-title">Боловсролын шинэчлэл: Сурагчдын оролцоог хэрхэн нэмэгдүүлэх вэ?</h1>
+                            <div class="article-meta">
+                                <span><i class="far fa-calendar"></i> 2023 оны 10 сарын 12</span>
+                                <span><i class="far fa-eye"></i> 8,901 үзсэн</span>
+                                <span><i class="far fa-clock"></i> 7 мин унших</span>
+                            </div>
+                        </div>
+                        
+                        <div class="article-content">
+                            <div class="article-text">
+                                <p>Боловсролын системд хийгдэж буй шинэчлэл, сурагчдын идэвхтэй оролцоог хэрхэн нэмэгдүүлэх талаар сургуулийн багш нар, эцэг эхчүүд, сурагчдын төлөөлөгчид оролцсон ярилцлага боллоо.</p>
+                                <p>Сүүлийн жилүүдэд боловсролын салбарт олон шинэчлэл хийгдэж байгаа ч сурагчдын оролцоо, идэвхжил хангалтгүй байна гэдгийг судалгаанууд харуулж байна.</p>
+                                <p>Мэргэжилтнүүдийн үзэж байгаагаар сурагчдын оролцоог нэмэгдүүлэхэд хамтын ажиллагаа, орчин үеийн сургалтын технологи, сурагчдын санал бодлыг хүндэтгэх орчин нөхцөлийг бүрдүүлэх нь чухал ач холбогдолтой.</p>
+                            </div>
+                            
+                            <div class="article-video">
+                                <div class="video-container">
+                                    <!-- You can replace this with an actual YouTube embed iframe -->
+                                    <div class="video-placeholder">
+                                        <i class="fab fa-youtube"></i>
+                                        <p>Энэ мэдээний холбогдох видео контент</p>
+                                        <p style="font-size: 14px; margin-top: 10px;">YouTube суваг дээрх холбогдох бичлэгийг энд оруулна уу</p>
+                                    </div>
+                                </div>
+                                <div class="video-info">
+                                    <div class="video-title">Боловсролын шинэчлэл - Сурагчдын оролцоо</div>
+                                    <div class="video-source">YouTube суваг: Budragchaa Ser</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- News Article 3 -->
+                    <div class="news-article">
+                        <div class="article-header">
+                            <h1 class="article-title">Цэвэр агаарын төлөөх тэмцэл: Амьдралын хэв маягт өөрчлөлт хийх нь</h1>
+                            <div class="article-meta">
+                                <span><i class="far fa-calendar"></i> 2023 оны 10 сарын 10</span>
+                                <span><i class="far fa-eye"></i> 15,678 үзсэн</span>
+                                <span><i class="far fa-clock"></i> 6 мин унших</span>
+                            </div>
+                        </div>
+                        
+                        <div class="article-content">
+                            <div class="article-text">
+                                <p>Агаарын бохирдлыг бууруулах, цэвэр агаарын төлөөх авч хэрэгжүүлж болох арга хэмжээний талаар мэргэжилтнүүд иргэдэд зөвлөмжүүдээ танилцууллаа.</p>
+                                <p>Орчин үеийн амьдралын хэв маяг нь байгаль орчинд ихээхэн нөлөө үзүүлдэг бөгөөд бидний өдөр тутмын жижиг шийдвэрүүд нь агаарын чанарт нөлөөлдөг.</p>
+                                <p>Мэргэжилтнүүд нийтийн тээврийн хэрэгсэл ашиглах, ногоон байгууламж нэмэгдүүлэх, эрчим хүчний хэмнэлттэй технологи ашиглах, хуванцар хэрэглээг бууруулах зэрэг арга замаар агаарын бохирдлыг бууруулж болно гэдгийг онцолсон.</p>
+                            </div>
+                            
+                            <div class="article-video">
+                                <div class="video-container">
+                                    <!-- You can replace this with an actual YouTube embed iframe -->
+                                    <div class="video-placeholder">
+                                        <i class="fab fa-youtube"></i>
+                                        <p>Энэ мэдээний холбогдох видео контент</p>
+                                        <p style="font-size: 14px; margin-top: 10px;">YouTube суваг дээрх холбогдох бичлэгийг энд оруулна уу</p>
+                                    </div>
+                                </div>
+                                <div class="video-info">
+                                    <div class="video-title">Цэвэр агаар - Амьдралын хэв маяг</div>
+                                    <div class="video-source">YouTube суваг: Budragchaa Ser</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="https://youtube.com/@budragchaaser?si=dKc5DalzlaOawiWH" target="_blank" class="youtube-channel-link">
+                        <i class="fab fa-youtube"></i> Бидний YouTube суваг руу очих
+                    </a>
+                </div>
+            </section>
+            
+            <!-- About Section with Contact Info -->
+            <section id="about" class="section">
+                <h2 class="section-title">Бидний Тухай</h2>
+                <p class="section-subtitle">Newstapa нь 2020 онд байгуулагдсан, бие даасан сэтгүүл зүйн байгууллага юм.</p>
+                
+                <div class="about-content">
+                    <div class="about-text">
+                        <h3>Бидний эрхэм зорилго</h3>
+                        <p>Бид нийгмийн хариуцлагатай сэтгүүл зүйг хөгжүүлж, иргэдэд үнэн бодит мэдээлэл хүргэх, нийгмийн асуудлуудыг гүнзгийрүүлэн судлах, ард түмнийг мэдээлэлтэй шийдвэр гаргахад дэмжлэг үзүүлэхийг зорилгоо болгодог.</p>
+                        
+                        <h3 style="margin-top: 30px;">Бидний үнэт зүйлс</h3>
+                        <p>Бид шударга ёс, ил тод байдал, бие даасан байдал, баримт дээр суурилсан судалгааг эрхэмлэдэг. Бүх агуулга нь гүнзгий судалгаа, баталгаажуулсан мэдээллээр бэлтгэгддэг.</p>
+                        
+                        <h3 style="margin-top: 30px;">Бидний хүрээнд</h3>
+                        <p>Одоогоор бид 15 орчим мэргэжлийн сэтгүүлч, судлаач, продюсер, редактортой баг хамт олонтойгоор ажиллаж, өдөр бүр шинэ агуулга гаргахад анхаарч байна.</p>
+                        
+                        <div class="team" style="margin-top: 40px;">
+                            <h3 style="font-size: 24px; color: var(--primary-color); margin-bottom: 25px;">Бидний багийн гишүүд</h3>
+                            
+                            <div class="team-grid">
+                                <div class="team-member">
+                                    <div class="member-photo"></div>
+                                    <h4 class="member-name">Болдбаатар</h4>
+                                    <p class="member-role">Ерөнхий редактор</p>
+                                </div>
+                                
+                                <div class="team-member">
+                                    <div class="member-photo" style="background-image: url('https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80');"></div>
+                                    <h4 class="member-name">Энхтуяа</h4>
+                                    <p class="member-role">Сэтгүүлч, судлаач</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info">
+                        <h3>Холбоо барих</h3>
+                        
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="contact-details">
+                                <h4>Хаяг</h4>
+                                <p>Улаанбаатар хот, Сүхбаатар дүүрэг</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div class="contact-details">
+                                <h4>Утас</h4>
+                                <p>+976 7011-2233</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div class="contact-details">
+                                <h4>И-мэйл</h4>
+                                <p>info@newstapa.org</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="fab fa-youtube"></i>
+                            <div class="contact-details">
+                                <h4>YouTube суваг</h4>
+                                <p>youtube.com/@budragchaaser</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="contact-details">
+                                <h4>Ажлын цаг</h4>
+                                <p>Даваа - Баасан: 09:00 - 18:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Donation Section -->
+            <section id="donation" class="section">
+                <h2 class="section-title">Хандив</h2>
+                <p class="section-subtitle">Таны хандив бие даасан сэтгүүл зүйг дэмжиж, чанартай агуулгыг үргэлжлүүлэхэд тусална</p>
+                
+                <div class="donation-options">
+                    <div class="donation-card">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <h3>Нэг удаагийн хандив</h3>
+                        <p>Таны нэг удаагийн хандив маань шинэ төслүүдийг эхлүүлэх, нэмэлт судалгаа хийхэд тусална.</p>
+                        <a href="#" class="donate-btn">Хандив өгөх</a>
+                    </div>
+                    
+                    <div class="donation-card">
+                        <i class="fas fa-calendar-check"></i>
+                        <h3>Сар тутмын дэмжлэг</h3>
+                        <p>Сар бүрийн тогтмол дэмжлэг нь бидэнд тогтвортой ажиллах, урт хугацааны төслүүдэд анхаарлаа хандуулах боломжийг олгоно.</p>
+                        <a href="#" class="donate-btn">Бүртгүүлэх</a>
+                    </div>
+                    
+                    <div class="donation-card">
+                        <i class="fas fa-briefcase"></i>
+                        <h3>Байгууллагын түншлэл</h3>
+                        <p>Хэрэв та байгууллага төлөөлж дэмжлэг үзүүлэх сонирхолтой бол бидэнтэй холбогдоорой.</p>
+                        <a href="#" class="donate-btn">Холбогдох</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Google Translate Script -->
+    <script type="text/javascript">
+        // Google Translate API function
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'mn',
+                includedLanguages: 'en,mn',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navMenu = document.getElementById('navMenu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            mobileMenuBtn.innerHTML = navMenu.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Section navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.section');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Get the target section id
+                const targetSectionId = link.getAttribute('data-section');
+                
+                // Update active nav link
+                navLinks.forEach(navLink => navLink.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Hide all sections
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show target section
+                document.getElementById(targetSectionId).classList.add('active');
+                
+                // Close mobile menu if open
+                if (navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+                
+                // Scroll to top when switching sections
+                window.scrollTo(0, 0);
+            });
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !mobileMenuBtn.contains(e.target) && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
+        
+        // Google Translate Button Functionality
+        const translateBtn = document.getElementById('translateBtn');
+        let isTranslated = false;
+        
+        translateBtn.addEventListener('click', () => {
+            // Wait a moment for Google Translate to load if needed
+            if (typeof google !== 'undefined' && google.translate) {
+                // Get the Google Translate dropdown
+                const select = document.querySelector('.goog-te-combo');
+                
+                if (select) {
+                    if (!isTranslated) {
+                        // Change to English
+                        select.value = 'en';
+                        translateBtn.innerHTML = '<i class="fas fa-language"></i><span>Монгол</span>';
+                        translateBtn.title = "Click to switch back to Mongolian";
+                        isTranslated = true;
+                    } else {
+                        // Change back to Mongolian
+                        select.value = 'mn';
+                        translateBtn.innerHTML = '<i class="fas fa-language"></i><span>English</span>';
+                        translateBtn.title = "Click to translate to English";
+                        isTranslated = false;
+                    }
+                    
+                    // Trigger the change event
+                    select.dispatchEvent(new Event('change'));
+                } else {
+                    // Fallback if Google Translate widget isn't loaded properly
+                    alert("Google Translate is still loading. Please try again in a moment.");
+                }
+            } else {
+                // If Google Translate isn't loaded yet, show a message
+                alert("Please wait for Google Translate to load, then try again.");
+            }
+        });
+        
+        // Add sample YouTube embed functionality (you can replace with actual embeds)
+        document.querySelectorAll('.video-placeholder').forEach(placeholder => {
+            placeholder.addEventListener('click', function() {
+                const videoTitle = this.closest('.article-video').querySelector('.video-title').textContent;
+                alert(`Та "${videoTitle}" видеог YouTube суваг дээрээс үзэх боломжтой. \n\nХолбоос: https://youtube.com/@budragchaaser`);
+            });
+        });
+        
+        // Hide the default Google Translate toolbar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Remove Google's default banner
+            const banner = document.querySelector('.goog-te-banner-frame');
+            if (banner) {
+                banner.style.display = 'none';
+            }
+            
+            // Hide the default Google Translate dropdown
+            const translateDropdown = document.querySelector('.goog-te-gadget');
+            if (translateDropdown) {
+                translateDropdown.style.display = 'none';
+            }
+            
+            // Set initial button title
+            translateBtn.title = "Click to translate to English";
+        });
+        
+        // Check for Google Translate loading
+        let translateLoadAttempts = 0;
+        const checkTranslateLoaded = setInterval(() => {
+            const select = document.querySelector('.goog-te-combo');
+            if (select) {
+                console.log("Google Translate loaded successfully");
+                clearInterval(checkTranslateLoaded);
+            } else if (translateLoadAttempts > 10) {
+                console.log("Google Translate failed to load");
+                clearInterval(checkTranslateLoaded);
+                translateBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Error</span>';
+                translateBtn.title = "Translation service failed to load";
+                translateBtn.style.backgroundColor = '#999';
+                translateBtn.disabled = true;
+            }
+            translateLoadAttempts++;
+        }, 500);
+    </script>
+</body>
+</html>
